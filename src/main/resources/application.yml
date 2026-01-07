@@ -1,0 +1,89 @@
+spring:
+  application:
+    name: BackendClubManagement
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 256MB
+  # Redis Cloud Configuration
+  data:
+    redis:
+      host: ${REDIS_HOST:redis-19779.c11.us-east-1-2.ec2.cloud.redislabs.com}
+      port: ${REDIS_PORT:19779}
+      password: ${REDIS_PASSWORD:DqOKYnixpHjgrpuRiKwx05N0jQTfpO9E}
+      database: ${REDIS_DATABASE:0}
+      ssl:
+        enabled: false
+      timeout: 5000ms
+      lettuce:
+        pool:
+          max-active: 20
+          max-idle: 10
+          min-idle: 2
+          max-wait: 3000ms
+        shutdown-timeout: 100ms
+      repositories:
+        enabled: false
+
+  datasource:
+    #    url: jdbc:mysql://gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/club_management?sslMode=VERIFY_IDENTITY&sslCa=G:/CA_certs/isrgrootx1.pem
+    url: jdbc:mysql://localhost:3306/club_management?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Ho_Chi_Minh
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+  # Email Configuration
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:nguyenthithuhuyen29403@gmail.com}
+    password: ${MAIL_PASSWORD:xhws pdmt cwda zjtw}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+host:
+  front-end: ${HOST_FRONT_END:http://localhost:5173}
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+  access-token-expiration: 900000   # 15 minutes in milliseconds
+  refresh-token-expiration: 86400000  # 1 day in milliseconds
+
+
+google:
+  client-id: "579761062626-ab7142u1563glcjv8dacr7e5l67dpsom.apps.googleusercontent.com"
+
+auth:
+  epu-api-url: ${EPU_API_URL:http://localhost:8081/api/allowed-users}
+
+app:
+  payos:
+    webhook-url: ${PAYOS_WEBHOOK_URL:https://34ea8a3c426e.ngrok-free.app/api/pay-os/webhook}
+  encryption:
+    # Base64-encoded AES-256 key (32 bytes). Generate with: openssl rand -base64 32
+    # IMPORTANT: Change this in production and store securely (vault/secret manager)
+    base64Key: ${ENCRYPTION_KEY:YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY=}
+
+cloudinary:
+  cloud-name: ${CLOUDINARY_CLOUD_NAME:duxq9ojyd}
+  api-key: ${CLOUDINARY_API_KEY:446267422555196}
+  api-secret: ${CLOUDINARY_API_SECRET:Y2izQULVv08IyNbK4oO0NAFViX4}
+
+
+

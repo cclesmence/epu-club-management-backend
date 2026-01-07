@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhắc nhở đóng phí</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .greeting {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .alert-box {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .alert-urgent {
+            background-color: #fee;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+        }
+        .alert-high {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            color: #856404;
+        }
+        .alert-normal {
+            background-color: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            color: #0c5460;
+        }
+        .fee-details {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+            margin: 20px 0;
+        }
+        .fee-details h3 {
+            margin-top: 0;
+            color: #667eea;
+            font-size: 18px;
+        }
+        .fee-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .fee-row:last-child {
+            border-bottom: none;
+        }
+        .fee-label {
+            font-weight: 600;
+            color: #666;
+        }
+        .fee-value {
+            color: #333;
+        }
+        .fee-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+        }
+        .fee-due-date {
+            font-size: 18px;
+            font-weight: bold;
+            color: #dc3545;
+        }
+        .warning-box {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+        .warning-box p {
+            margin: 0;
+            color: #856404;
+        }
+        .button-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .btn-primary {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white !important;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+        .note {
+            color: #6c757d;
+            font-size: 14px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #e0e0e0;
+        }
+        .footer p {
+            margin: 5px 0;
+            color: #6c757d;
+            font-size: 12px;
+        }
+        .icon {
+            font-size: 20px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1 th:text="${clubName}">Club Name</h1>
+        <p>Hệ thống quản lý câu lạc bộ</p>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <!-- Greeting -->
+        <div class="greeting">
+            <p>Xin chào <strong th:text="${userName}">Thành viên</strong>,</p>
+        </div>
+
+        <!-- Alert Box -->
+        <div th:class="${'alert-box ' + alertClass}">
+            <span class="icon" th:text="${alertIcon}">⚠️</span>
+            <span th:text="${alertMessage}">Nhắc nhở đóng phí</span>
+        </div>
+
+        <!-- Message -->
+        <p th:if="${daysBeforeDue == 0}">
+            Đây là email nhắc nhở <strong>CỰC KỲ KHẨN CẤP</strong> về khoản phí bắt buộc đã đến hạn.
+        </p>
+        <p th:if="${daysBeforeDue == 1}">
+            Đây là email nhắc nhở <strong>KHẨN CẤP</strong> về khoản phí bắt buộc sắp đến hạn.
+        </p>
+        <p th:if="${daysBeforeDue > 1}">
+            Đây là email nhắc nhở về khoản phí bắt buộc sắp đến hạn.
+        </p>
+
+        <!-- Fee Details -->
+        <div class="fee-details">
+            <h3>📋 Chi tiết khoản phí</h3>
+
+            <div class="fee-row">
+                <span class="fee-label">Tên khoản phí:</span>
+                <span class="fee-value" th:text="${feeTitle}">Phí thành viên</span>
+            </div>
+
+            <div class="fee-row" th:if="${feeDescription}">
+                <span class="fee-label">Mô tả:</span>
+                <span class="fee-value" th:text="${feeDescription}">Mô tả phí</span>
+            </div>
+
+            <div class="fee-row">
+                <span class="fee-label">Số tiền:</span>
+                <span class="fee-amount" th:text="${#numbers.formatDecimal(feeAmount, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">100,000 VNĐ</span>
+            </div>
+
+            <div class="fee-row">
+                <span class="fee-label">Hạn cuối:</span>
+                <span class="fee-due-date" th:text="${#temporals.format(feeDueDate, 'dd/MM/yyyy')}">01/12/2024</span>
+            </div>
+
+            <div class="fee-row">
+                <span class="fee-label">Loại phí:</span>
+                <span class="fee-value" th:text="${feeType}">Phí thành viên</span>
+            </div>
+
+            <div class="fee-row" th:if="${semesterName}">
+                <span class="fee-label">Học kỳ:</span>
+                <span class="fee-value" th:text="${semesterName}">Học kỳ 1 - 2024</span>
+            </div>
+        </div>
+
+        <!-- Warning Box (for urgent cases) -->
+        <div class="warning-box" th:if="${daysBeforeDue <= 1}">
+            <p>
+                <strong>⚠️ Lưu ý quan trọng:</strong>
+                Vui lòng đóng phí trước hạn để tránh bị ảnh hưởng đến tư cách thành viên và các quyền lợi trong câu lạc bộ!
+            </p>
+        </div>
+
+        <!-- Action Button -->
+        <div class="button-container">
+            <a th:href="${actionUrl}" class="btn-primary">
+                💳 Đóng phí ngay
+            </a>
+        </div>
+
+        <!-- Note -->
+        <div class="note">
+            <p>Nếu bạn đã đóng phí, vui lòng bỏ qua email này.</p>
+            <p>Cảm ơn bạn đã đồng hành cùng <span th:text="${clubName}">Club</span>! 🎉</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p><strong>Email tự động từ hệ thống quản lý câu lạc bộ</strong></p>
+        <p>Vui lòng không trả lời email này</p>
+        <p th:if="${currentYear}">© <span th:text="${currentYear}">2024</span> - All rights reserved</p>
+    </div>
+</div>
+</body>
+</html>
+

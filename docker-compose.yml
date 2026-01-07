@@ -1,0 +1,44 @@
+version: '3.9'
+
+services:
+  epu-api:
+    image: ${EPU_IMAGE_NAME:-epu-api:latest}
+    container_name: epu-api-container
+    restart: always
+    ports:
+      - "8081:8081"
+    networks:
+      - fcm-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: fcm-backend:latest
+    container_name: fcm-backend-container
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_DATABASE: ${REDIS_DATABASE}
+      HOST_FRONT_END: ${HOST_FRONT_END:-http://localhost:5173}
+      PAYOS_WEBHOOK_URL: ${PAYOS_WEBHOOK_URL}
+      EPU_API_URL: http://epu-api:8081/api/allowed-users
+    depends_on:
+      - epu-api
+    networks:
+      - fcm-network
+
+volumes:
+  redis-app-data:
+
+networks:
+  fcm-network:
+    driver: bridge
+    name: fcm-network
