@@ -76,7 +76,7 @@ auth:
 
 app:
   payos:
-    webhook-url: ${PAYOS_WEBHOOK_URL:https://34ea8a3c426e.ngrok-free.app/api/pay-os/webhook}
+    webhook-url: ${PAYOS_WEBHOOK_URL:https://unconcurring-shila-trappier.ngrok-free.dev/api/pay-os/webhook}
   encryption:
     # Base64-encoded AES-256 key (32 bytes). Generate with: openssl rand -base64 32
     # IMPORTANT: Change this in production and store securely (vault/secret manager)
